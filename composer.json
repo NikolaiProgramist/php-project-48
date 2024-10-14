@@ -16,5 +16,8 @@
             "name": "NikolaiProgramist",
             "email": "nikluk2005@mail.ru"
         }
+    ],
+    "bin": [
+        "bin/gendiff.php"
     ]
 }
