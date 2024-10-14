@@ -11,8 +11,6 @@ if (file_exists($autoloadPathLocal)) {
     require_once $autoloadPathGlobal;
 }
 
-use function cli\line;
-
 $doc = <<<DOC
 Generate diff
 
@@ -27,4 +25,4 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-$args = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
+Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
