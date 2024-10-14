@@ -11,6 +11,8 @@ if (file_exists($autoloadPathLocal)) {
     require_once $autoloadPathGlobal;
 }
 
+use function Gendiff\Parser\parse;
+
 $doc = <<<DOC
 Generate diff
 
@@ -25,4 +27,9 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
+$argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
+
+$pathFirstFile = __DIR__ . '/../' . $argv['<firstFile>'];
+$pathSecondFile = __DIR__ . '/../' . $argv['<secondFile>'];
+
+parse($pathFirstFile, $pathSecondFile);

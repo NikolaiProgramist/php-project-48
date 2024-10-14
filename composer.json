@@ -19,5 +19,10 @@
     ],
     "bin": [
         "bin/gendiff.php"
-    ]
+    ],
+    "autoload": {
+        "files": [
+            "src/parser.php"
+        ]
+    }
 }
