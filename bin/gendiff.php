@@ -29,7 +29,4 @@ DOC;
 
 $argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
 
-$pathFirstFile = __DIR__ . '/../' . $argv['<firstFile>'];
-$pathSecondFile = __DIR__ . '/../' . $argv['<secondFile>'];
-
-parse($pathFirstFile, $pathSecondFile);
+parse($argv['<firstFile>'], $argv['<secondFile>']);
