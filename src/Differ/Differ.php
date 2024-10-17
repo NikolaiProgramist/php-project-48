@@ -8,7 +8,7 @@ const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
 const UNCHANGED_MARKER = '=';
 
-function genDiff(array $filesContent)
+function genDiff(array $filesContent): string
 {
     $firstFile = json_decode($filesContent['firstFileContent'], true);
     $secondFile = json_decode($filesContent['secondFileContent'], true);
@@ -77,8 +77,5 @@ function translateDiffToString(array $diff): string
         return $acc;
     }, '');
 
-    return <<<DOC
-    {{$diffString}
-    }
-    DOC;
+    return "{{$diffString}\n}";
 }
