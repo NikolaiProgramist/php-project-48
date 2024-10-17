@@ -57,25 +57,40 @@ function translateDiffToString(array $diff): string
         $keyName = is_array($key['keyName']) ? $key['keyName'][0] : $key['keyName'];
 
         if (array_key_exists(REMOVE_MARKER, $key)) {
-            $acc .= PHP_EOL . <<<DOC
-              - {$keyName}: {$key[REMOVE_MARKER]}
-            DOC;
+            $keyValue = $key[REMOVE_MARKER];
+
+            if (is_bool($keyValue)) {
+                $keyValue = $key[REMOVE_MARKER] ? 'true' : 'false';
+            }
+
+            $string = "  %s %s: %s\n";
+            $acc .= sprintf($string, REMOVE_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(ADD_MARKER, $key)) {
-            $acc .= PHP_EOL . <<<DOC
-              + {$keyName}: {$key[ADD_MARKER]}
-            DOC;
+            $keyValue = $key[ADD_MARKER];
+
+            if (is_bool($keyValue)) {
+                $keyValue = $key[ADD_MARKER] ? 'true' : 'false';
+            }
+
+            $string = "  %s %s: %s\n";
+            $acc .= sprintf($string, ADD_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(UNCHANGED_MARKER, $key)) {
-            $acc .= PHP_EOL . <<<DOC
-                {$keyName}: {$key[UNCHANGED_MARKER]}
-            DOC;
+            $keyValue = $key[UNCHANGED_MARKER];
+
+            if (is_bool($keyValue)) {
+                $keyValue = $key[UNCHANGED_MARKER] ? 'true' : 'false';
+            }
+
+            $string = "  %s %s: %s\n";
+            $acc .= sprintf($string, ' ', $keyName, $keyValue);
         }
 
         return $acc;
     }, '');
 
-    return "{{$diffString}\n}";
+    return "{\n{$diffString}}";
 }
