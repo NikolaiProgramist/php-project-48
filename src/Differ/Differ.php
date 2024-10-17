@@ -2,7 +2,6 @@
 
 namespace Differ\Differ;
 
-use function Functional\flatten;
 use function Functional\sort;
 
 const ADD_MARKER = '+';
@@ -49,5 +48,37 @@ function genDiff(array $filesContent)
         true
     );
 
-    return generateDiffToString($diffSorted);
+    return translateDiffToString($diffSorted);
+}
+
+function translateDiffToString(array $diff): string
+{
+    $diffString = array_reduce($diff, function ($acc, $key) use ($diff) {
+        $keyName = is_array($key['keyName']) ? $key['keyName'][0] : $key['keyName'];
+
+        if (array_key_exists(REMOVE_MARKER, $key)) {
+            $acc .= PHP_EOL . <<<DOC
+              - {$keyName}: {$key[REMOVE_MARKER]}
+            DOC;
+        }
+
+        if (array_key_exists(ADD_MARKER, $key)) {
+            $acc .= PHP_EOL . <<<DOC
+              + {$keyName}: {$key[ADD_MARKER]}
+            DOC;
+        }
+
+        if (array_key_exists(UNCHANGED_MARKER, $key)) {
+            $acc .= PHP_EOL . <<<DOC
+                {$keyName}: {$key[UNCHANGED_MARKER]}
+            DOC;
+        }
+
+        return $acc;
+    }, '');
+
+    return <<<DOC
+    {{$diffString}
+    }
+    DOC;
 }
