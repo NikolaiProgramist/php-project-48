@@ -1,15 +1,15 @@
 <?php
 
-namespace Gendiff\Parser;
+namespace Differ\Parser;
 
 use function cli\line;
+use function Differ\Differ\genDiff;
 
 function parse(string $pathFirst, string $pathSecond): void
 {
     $filesContent = getFileContent($pathFirst, $pathSecond);
 
-    line($filesContent['firstFileContent']);
-    line($filesContent['secondFileContent']);
+    print_r(genDiff($filesContent));
 }
 
 function getFileContent(string $pathFirst, string $pathSecond): array
