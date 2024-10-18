@@ -67,8 +67,7 @@ function translateDiffToString(array $diff): string
                 $keyValue = $key[REMOVE_MARKER] ? 'true' : 'false';
             }
 
-            $string = "  %s %s: %s\n";
-            $acc .= sprintf($string, REMOVE_MARKER, $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", REMOVE_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(ADD_MARKER, $key)) {
@@ -78,8 +77,7 @@ function translateDiffToString(array $diff): string
                 $keyValue = $key[ADD_MARKER] ? 'true' : 'false';
             }
 
-            $string = "  %s %s: %s\n";
-            $acc .= sprintf($string, ADD_MARKER, $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", ADD_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(UNCHANGED_MARKER, $key)) {
@@ -89,8 +87,7 @@ function translateDiffToString(array $diff): string
                 $keyValue = $key[UNCHANGED_MARKER] ? 'true' : 'false';
             }
 
-            $string = "  %s %s: %s\n";
-            $acc .= sprintf($string, ' ', $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", ' ', $keyName, $keyValue);
         }
 
         return $acc;
