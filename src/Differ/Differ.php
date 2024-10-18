@@ -32,10 +32,14 @@ function genDiff(array $filesContent): string
     );
 
     $firstFileUnchanged = array_intersect($firstFile, $secondFile);
-    $unchangedCollection = array_reduce(array_keys($firstFileUnchanged), function ($collection, $element) use ($firstFileUnchanged) {
-        $collection[$element] = ['keyName' => $element, UNCHANGED_MARKER => $firstFileUnchanged[$element]];
-        return $collection;
-    }, []);
+    $unchangedCollection = array_reduce(
+        array_keys($firstFileUnchanged),
+        function ($collection, $element) use ($firstFileUnchanged) {
+            $collection[$element] = ['keyName' => $element, UNCHANGED_MARKER => $firstFileUnchanged[$element]];
+            return $collection;
+        },
+        []
+    );
 
     $diffSorted = sort(
         array_merge_recursive($addCollection, $removeCollection, $unchangedCollection),
