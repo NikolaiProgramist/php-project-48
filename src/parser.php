@@ -8,8 +8,7 @@ use function Differ\Differ\genDiff;
 function parse(string $pathFirst, string $pathSecond): void
 {
     $filesContent = getFileContent($pathFirst, $pathSecond);
-
-    print_r(genDiff($filesContent));
+    line(genDiff($filesContent));
 }
 
 function getFileContent(string $pathFirst, string $pathSecond): array
