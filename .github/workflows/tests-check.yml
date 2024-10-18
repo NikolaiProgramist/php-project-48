@@ -1,0 +1,22 @@
+name: tests-check
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
+      - name: Install
+        run: make install
+
+      - name: Run linter
+        run: make lint
