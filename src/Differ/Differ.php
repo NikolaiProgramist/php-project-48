@@ -25,9 +25,17 @@ function genDiff(array $filesContent): string
     $firstFileRemove = array_diff_assoc($firstFile, $secondFile);
     $removeCollection = array_reduce(
         array_keys($firstFileRemove),
-        fn($collection, $key) => array_merge($collection, [
-            $key => ['keyName' => $key, REMOVE_MARKER => $firstFileRemove[$key]]
-        ]),
+        function ($collection, $key) use ($firstFileRemove, $addCollection) {
+            if (!array_key_exists($key, $addCollection)) {
+                return array_merge($collection, [
+                    $key => ['keyName' => $key, REMOVE_MARKER => $firstFileRemove[$key]]
+                ]);
+            }
+
+            return array_merge($collection, [
+                $key => [REMOVE_MARKER => $firstFileRemove[$key]]
+            ]);
+        },
         []
     );
 
@@ -43,12 +51,7 @@ function genDiff(array $filesContent): string
 
     $diffSorted = sort(
         array_merge_recursive($addCollection, $removeCollection, $unchangedCollection),
-        function ($left, $right) {
-            $l = is_array($left['keyName']) ? $left['keyName'][0] : $left['keyName'];
-            $r = is_array($right['keyName']) ? $right['keyName'][0] : $right['keyName'];
-
-            return strcmp($l, $r);
-        },
+        fn($left, $right) => strcmp($left['keyName'], $right['keyName']),
         true
     );
 
@@ -58,7 +61,7 @@ function genDiff(array $filesContent): string
 function translateDiffToString(array $diff): string
 {
     $diffString = array_reduce($diff, function ($acc, $key) use ($diff) {
-        $keyName = is_array($key['keyName']) ? $key['keyName'][0] : $key['keyName'];
+        $keyName = $key['keyName'];
 
         if (array_key_exists(REMOVE_MARKER, $key)) {
             $keyValue = $key[REMOVE_MARKER];
