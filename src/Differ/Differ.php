@@ -14,40 +14,13 @@ function genDiff(array $filesContent): string
     $secondFile = json_decode($filesContent['secondFileContent'], true);
 
     $firstFileAdd = array_diff_assoc($secondFile, $firstFile);
-    $addCollection = array_reduce(
-        array_keys($firstFileAdd),
-        fn($collection, $key) => array_merge($collection, [
-            $key => ['keyName' => $key, ADD_MARKER => $firstFileAdd[$key]]
-        ]),
-        []
-    );
+    $addCollection = getStringAddElements($firstFileAdd);
 
     $firstFileRemove = array_diff_assoc($firstFile, $secondFile);
-    $removeCollection = array_reduce(
-        array_keys($firstFileRemove),
-        function ($collection, $key) use ($firstFileRemove, $addCollection) {
-            if (!array_key_exists($key, $addCollection)) {
-                return array_merge($collection, [
-                    $key => ['keyName' => $key, REMOVE_MARKER => $firstFileRemove[$key]]
-                ]);
-            }
-
-            return array_merge($collection, [
-                $key => [REMOVE_MARKER => $firstFileRemove[$key]]
-            ]);
-        },
-        []
-    );
+    $removeCollection = getStringRemoveElements($firstFileRemove, $firstFileAdd);
 
     $firstFileUnchanged = array_intersect($firstFile, $secondFile);
-    $unchangedCollection = array_reduce(
-        array_keys($firstFileUnchanged),
-        function ($collection, $element) use ($firstFileUnchanged) {
-            $collection[$element] = ['keyName' => $element, UNCHANGED_MARKER => $firstFileUnchanged[$element]];
-            return $collection;
-        },
-        []
-    );
+    $unchangedCollection = getStringUnchangedElements($firstFileUnchanged);
 
     $diffSorted = sort(
         array_merge_recursive($addCollection, $removeCollection, $unchangedCollection),
@@ -56,6 +29,48 @@ function genDiff(array $filesContent): string
     );
 
     return translateDiffToString($diffSorted);
+}
+
+function getStringAddElements(array $diff): array
+{
+    return array_reduce(
+        array_keys($diff),
+        fn($collection, $key) => array_merge($collection, [
+            $key => ['keyName' => $key, ADD_MARKER => $diff[$key]]
+        ]),
+        []
+    );
+}
+
+function getStringRemoveElements(array $diff, array $addCollection): array
+{
+    return array_reduce(
+        array_keys($diff),
+        function ($collection, $key) use ($diff, $addCollection) {
+            if (!array_key_exists($key, $addCollection)) {
+                return array_merge($collection, [
+                    $key => ['keyName' => $key, REMOVE_MARKER => $diff[$key]]
+                ]);
+            }
+
+            return array_merge($collection, [
+                $key => [REMOVE_MARKER => $diff[$key]]
+            ]);
+        },
+        []
+    );
+}
+
+function getStringUnchangedElements(array $diff): array
+{
+    return array_reduce(
+        array_keys($diff),
+        function ($collection, $element) use ($diff) {
+            $collection[$element] = ['keyName' => $element, UNCHANGED_MARKER => $diff[$element]];
+            return $collection;
+        },
+        []
+    );
 }
 
 function translateDiffToString(array $diff): string
