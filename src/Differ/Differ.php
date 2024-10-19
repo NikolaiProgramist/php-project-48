@@ -6,7 +6,7 @@ use function Functional\sort;
 
 const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
-const UNCHANGED_MARKER = '=';
+const UNCHANGED_MARKER = ' ';
 
 function genDiff(array $filesContent): string
 {
@@ -62,23 +62,28 @@ function translateDiffToString(array $diff): string
 
         if (array_key_exists(REMOVE_MARKER, $key)) {
             $keyValue = $key[REMOVE_MARKER];
-            $acc .= sprintf("  %s %s: %s\n", REMOVE_MARKER, $keyName, boolToString($keyValue));
+            $acc .= getStringWithMarker(REMOVE_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(ADD_MARKER, $key)) {
             $keyValue = $key[ADD_MARKER];
-            $acc .= sprintf("  %s %s: %s\n", ADD_MARKER, $keyName, boolToString($keyValue));
+            $acc .= getStringWithMarker(ADD_MARKER, $keyName, $keyValue);
         }
 
         if (array_key_exists(UNCHANGED_MARKER, $key)) {
             $keyValue = $key[UNCHANGED_MARKER];
-            $acc .= sprintf("  %s %s: %s\n", ' ', $keyName, boolToString($keyValue));
+            $acc .= getStringWithMarker(UNCHANGED_MARKER, $keyName, $keyValue);
         }
 
         return $acc;
     }, '');
 
     return "{\n{$diffString}}";
+}
+
+function getStringWithMarker(string $marker, string $name, mixed $value): string
+{
+    return sprintf("  %s %s: %s\n", $marker, $name, boolToString($value));
 }
 
 function boolToString(mixed $string): string
