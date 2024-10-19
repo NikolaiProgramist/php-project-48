@@ -62,36 +62,30 @@ function translateDiffToString(array $diff): string
 
         if (array_key_exists(REMOVE_MARKER, $key)) {
             $keyValue = $key[REMOVE_MARKER];
-
-            if (is_bool($keyValue)) {
-                $keyValue = $key[REMOVE_MARKER] ? 'true' : 'false';
-            }
-
-            $acc .= sprintf("  %s %s: %s\n", REMOVE_MARKER, $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", REMOVE_MARKER, $keyName, boolToString($keyValue));
         }
 
         if (array_key_exists(ADD_MARKER, $key)) {
             $keyValue = $key[ADD_MARKER];
-
-            if (is_bool($keyValue)) {
-                $keyValue = $key[ADD_MARKER] ? 'true' : 'false';
-            }
-
-            $acc .= sprintf("  %s %s: %s\n", ADD_MARKER, $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", ADD_MARKER, $keyName, boolToString($keyValue));
         }
 
         if (array_key_exists(UNCHANGED_MARKER, $key)) {
             $keyValue = $key[UNCHANGED_MARKER];
-
-            if (is_bool($keyValue)) {
-                $keyValue = $key[UNCHANGED_MARKER] ? 'true' : 'false';
-            }
-
-            $acc .= sprintf("  %s %s: %s\n", ' ', $keyName, $keyValue);
+            $acc .= sprintf("  %s %s: %s\n", ' ', $keyName, boolToString($keyValue));
         }
 
         return $acc;
     }, '');
 
     return "{\n{$diffString}}";
+}
+
+function boolToString(mixed $string): string
+{
+    if (is_bool($string)) {
+        return $string ? 'true' : 'false';
+    }
+
+    return $string;
 }
