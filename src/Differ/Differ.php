@@ -96,7 +96,7 @@ function translateDiffToString(array $diff): string
         return $acc;
     }, '');
 
-    return "{\n{$diffString}}";
+    return "{\n{$diffString}}\n";
 }
 
 function getStringWithMarker(string $marker, string $name, mixed $value): string
