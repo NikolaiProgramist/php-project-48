@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Differ;
+namespace Differ\Differ\Differ;
 
 use function Functional\sort;
 use function Differ\Differ\Translator\getJson;

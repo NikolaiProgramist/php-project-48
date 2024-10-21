@@ -24,7 +24,7 @@
     ],
     "autoload": {
         "files": [
-            "src/parser.php",
+            "src/Parsers/Parser.php",
             "src/Differ/Differ.php",
             "src/Differ/Translator.php"
         ]
