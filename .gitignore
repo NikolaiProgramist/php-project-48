@@ -1,3 +1,5 @@
 /vendor/
 /.idea/
 /.phpunit.cache/
+before.json
+after.json
