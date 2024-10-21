@@ -8,45 +8,45 @@ use function PHPUnit\Framework\assertEquals;
 
 class DifferTest extends TestCase
 {
-    private string $firstContentJson;
-    private string $secondContentJson;
-    private string $firstContentYaml;
-    private string $secondContentYaml;
-    private string $resultFileContent;
+    private string $afterJsonPath;
+    private string $beforeJsonPath;
+    private string $afterYamlPath;
+    private string $beforeYamlPath;
+    private string $resultPath;
 
     public function setUp(): void
     {
-        $this->firstContentJson = $this->getFixtureContent('before.json');
-        $this->secondContentJson = $this->getFixtureContent('after.json');
+        $this->beforeJsonPath = $this->getFixturePath('before.json');
+        $this->afterJsonPath = $this->getFixturePath('after.json');
 
-        $this->firstContentYaml = $this->getFixtureContent('before.yaml');
-        $this->secondContentYaml = $this->getFixtureContent('after.yaml');
+        $this->beforeYamlPath = $this->getFixturePath('before.yaml');
+        $this->afterYamlPath = $this->getFixturePath('after.yaml');
 
-        $this->resultFileContent = $this->getFixtureContent('result.txt');
+        $this->resultPath = $this->getFixturePath('result.txt');
     }
 
-    public function getFixtureContent(string $fixtureName): string
+    public function getFixturePath(string $fixtureName): string
     {
         $parts = [__DIR__, 'fixtures', $fixtureName];
-        return file_get_contents(realpath(implode('/', $parts)));
+        return realpath(implode('/', $parts));
     }
 
     public function testGenDiff(): void
     {
         assertEquals(
-            $this->resultFileContent,
-            genDiff([
-                'firstFileContent' => $this->firstContentJson,
-                'secondFileContent' => $this->secondContentJson
-            ])
+            file_get_contents($this->resultPath),
+            genDiff(
+                $this->beforeJsonPath,
+                $this->afterJsonPath
+            )
         );
 
         assertEquals(
-            $this->resultFileContent,
-            genDiff([
-                'firstFileContent' => $this->firstContentYaml,
-                'secondFileContent' => $this->secondContentYaml
-            ])
+            file_get_contents($this->resultPath),
+            genDiff(
+                $this->beforeYamlPath,
+                $this->afterYamlPath
+            )
         );
     }
 }
