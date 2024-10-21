@@ -11,6 +11,7 @@ if (file_exists($autoloadPathLocal)) {
     require_once $autoloadPathGlobal;
 }
 
+use function cli\line;
 use function Differ\Parser\parse;
 
 $doc = <<<DOC
@@ -29,4 +30,4 @@ DOC;
 
 $argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
 
-print_r(parse($argv['<firstFile>'], $argv['<secondFile>']));
+line(parse($argv['<firstFile>'], $argv['<secondFile>']));
