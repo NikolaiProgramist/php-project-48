@@ -12,7 +12,7 @@ if (file_exists($autoloadPathLocal)) {
 }
 
 use function cli\line;
-use function Differ\Parsers\Parser\parse;
+use function Differ\Parsers\Parser\Parse;
 
 $doc = <<<DOC
 Generate diff
