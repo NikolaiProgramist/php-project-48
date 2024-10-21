@@ -2,8 +2,8 @@
 
 namespace Differ\Differ;
 
-use function cli\line;
 use function Functional\sort;
+use function Differ\Differ\Translator\getJson;
 
 const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
@@ -11,8 +11,8 @@ const UNCHANGED_MARKER = ' ';
 
 function genDiff(string $pathToFile1, string $pathToFile2): string
 {
-    $firstFile = json_decode(getFileContent($pathToFile1), true);
-    $secondFile = json_decode(getFileContent($pathToFile2), true);
+    $firstFile = getJson($pathToFile1);
+    $secondFile = getJson($pathToFile2);
 
     $firstFileAdd = array_diff_assoc($secondFile, $firstFile);
     $addCollection = getStringAddElements($firstFileAdd);
@@ -112,20 +112,4 @@ function boolToString(mixed $string): string
     }
 
     return $string;
-}
-
-function getFileContent(string $path): string
-{
-    if (str_starts_with($path, '/')) {
-        $fullPath = $path;
-    } else {
-        $fullPath = __DIR__ . '/../../' . $path;
-    }
-
-    if (!file_exists($fullPath)) {
-        line("File: \"{$fullPath}\" don't exists!");
-        exit;
-    }
-
-    return file_get_contents($fullPath);
 }
