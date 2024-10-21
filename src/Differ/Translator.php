@@ -2,8 +2,9 @@
 
 namespace Differ\Differ\Translator;
 
-use function cli\line;
 use Symfony\Component\Yaml\Yaml;
+
+use function cli\line;
 
 function getJson(string $path): array
 {
