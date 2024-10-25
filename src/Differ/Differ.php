@@ -15,8 +15,7 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     $firstFile = getJson($pathToFile1);
     $secondFile = getJson($pathToFile2);
 
-    $sortingFirstFile = function ($acc, $key, $tree1, $tree2, $currentSorting)
-    {
+    $sortingFirstFile = function ($acc, $key, $tree1, $tree2, $currentSorting) {
         if (!array_key_exists($key, $tree2)) {
             $acc[REMOVE_MARKER . $key] = $tree1[$key];
             return $acc;
@@ -103,7 +102,7 @@ function sortArrayByKeysRecursive(array $tree): array
 {
     $keysSorted = sort(
         array_keys($tree),
-        function($left, $right) {
+        function ($left, $right) {
             $l = $left;
             $r = $right;
 
