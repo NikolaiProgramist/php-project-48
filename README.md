@@ -10,3 +10,7 @@
 #### Diff of YAML
 
 [![asciicast](https://asciinema.org/a/682331.svg)](https://asciinema.org/a/682331)
+
+#### Nested Diff of YAML
+
+[![asciicast](https://asciinema.org/a/684444.svg)](https://asciinema.org/a/684444)
