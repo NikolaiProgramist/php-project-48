@@ -28,5 +28,6 @@ Options:
 DOC;
 
 $argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
+$format = $argv['<fmt>'] ?? 'stylish';
 
-parse($argv['<firstFile>'], $argv['<secondFile>']);
+parse($argv['<firstFile>'], $argv['<secondFile>'], $format);

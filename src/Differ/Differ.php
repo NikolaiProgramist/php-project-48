@@ -4,12 +4,13 @@ namespace Differ\Differ\Differ;
 
 use function Functional\sort;
 use function Differ\Differ\Translator\getJson;
+use function Differ\Formatters\Stylish\stylish;
 
 const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
 const UNCHANGED_MARKER = ' ';
 
-function genDiff(string $pathToFile1, string $pathToFile2): void
+function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {
     $firstFile = getJson($pathToFile1);
     $secondFile = getJson($pathToFile2);
@@ -31,9 +32,6 @@ function genDiff(string $pathToFile1, string $pathToFile2): void
                 return $acc;
             }
 
-            $value1 = toString($tree1[$key]);
-            $value2 = toString($tree2[$key]);
-
             if ($value1 === $value2) {
                 $acc[UNCHANGED_MARKER . $key] = $value1;
             } else {
@@ -50,7 +48,7 @@ function genDiff(string $pathToFile1, string $pathToFile2): void
             return $acc;
         }
 
-        $innerContent = stringifyTree($value1, $value2, $currentSorting);
+        $innerContent = getCustomDiff($value1, $value2, $currentSorting);
         $acc[$key] = $innerContent;
         return $acc;
     };
@@ -58,7 +56,7 @@ function genDiff(string $pathToFile1, string $pathToFile2): void
     $sortingSecondFile = function ($acc, $key, $tree2, $tree1, $currentSorting) {
         if (array_key_exists($key, $tree1)) {
             if (is_array($tree1[$key]) && is_array($tree2[$key])) {
-                $innerContent = stringifyTree($tree2[$key], $tree1[$key], $currentSorting);
+                $innerContent = getCustomDiff($tree2[$key], $tree1[$key], $currentSorting);
                 $acc[$key] = $innerContent;
                 return $acc;
             }
@@ -71,17 +69,22 @@ function genDiff(string $pathToFile1, string $pathToFile2): void
             return $acc;
         }
 
-        $acc[ADD_MARKER . $key] = toString($tree2[$key]);
+        $acc[ADD_MARKER . $key] = $tree2[$key];
         return $acc;
     };
 
-    $elements = stringifyTree($firstFile, $secondFile, $sortingFirstFile);
-    $elements2 = stringifyTree($secondFile, $firstFile, $sortingSecondFile);
+    $elements = getCustomDiff($firstFile, $secondFile, $sortingFirstFile);
+    $elements2 = getCustomDiff($secondFile, $firstFile, $sortingSecondFile);
 
-    print_r(sortByKeysRecursive(array_merge_recursive($elements, $elements2)));
+    $resultDiff = sortArrayByKeysRecursive(array_merge_recursive($elements, $elements2));
+
+    switch ($format) {
+        case 'stylish':
+            return stylish($resultDiff);
+    }
 }
 
-function stringifyTree(array $tree1, array $tree2, callable $sorting): array
+function getCustomDiff(array $tree1, array $tree2, callable $sorting): array
 {
     $keysSorted = sort(
         array_keys($tree1),
@@ -96,7 +99,7 @@ function stringifyTree(array $tree1, array $tree2, callable $sorting): array
     );
 }
 
-function sortByKeysRecursive(array $tree): array
+function sortArrayByKeysRecursive(array $tree): array
 {
     $keysSorted = sort(
         array_keys($tree),
@@ -125,21 +128,8 @@ function sortByKeysRecursive(array $tree): array
             return $acc;
         }
 
-        $innerContent = sortByKeysRecursive($tree[$key]);
+        $innerContent = sortArrayByKeysRecursive($tree[$key]);
         $acc[$key] = $innerContent;
         return $acc;
     }, []);
-}
-
-function toString($string): string
-{
-    if (is_bool($string)) {
-        return $string ? 'true' : 'false';
-    }
-
-    if (is_null($string)) {
-        return 'null';
-    }
-
-    return $string;
 }
