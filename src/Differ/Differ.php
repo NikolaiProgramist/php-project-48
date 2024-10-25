@@ -85,14 +85,8 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
 
 function getCustomDiff(array $tree1, array $tree2, callable $sorting): array
 {
-    $keysSorted = sort(
-        array_keys($tree1),
-        fn($left, $right) => strcmp($left, $right),
-        true
-    );
-
     return array_reduce(
-        $keysSorted,
+        array_keys($tree1),
         fn($acc, $key) => $sorting($acc, $key, $tree1, $tree2, $sorting),
         []
     );
