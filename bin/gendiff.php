@@ -11,8 +11,7 @@ if (file_exists($autoloadPathLocal)) {
     require_once $autoloadPathGlobal;
 }
 
-use function cli\line;
-use function Differ\Parsers\Parser\Parse;
+use function Differ\Parser\Parse;
 
 $doc = <<<DOC
 Generate diff
@@ -30,4 +29,4 @@ DOC;
 
 $argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
 
-line(parse($argv['<firstFile>'], $argv['<secondFile>']));
+parse($argv['<firstFile>'], $argv['<secondFile>']);
