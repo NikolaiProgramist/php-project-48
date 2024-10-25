@@ -21,7 +21,8 @@ function stylish($tree, string $replacer = ' ', int $spacesCount = 4, int $depth
 
             if (!is_array($tree[$key])) {
                 $value = toString($tree[$key]);
-                $acc .= $indentation . "{$marker} {$keyName}: {$value}\n";
+                $value = $value === '' ? '' : " {$value}";
+                $acc .= $indentation . "{$marker} {$keyName}:{$value}\n";
                 return $acc;
             }
 
