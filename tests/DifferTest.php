@@ -24,7 +24,7 @@ class DifferTest extends TestCase
         $this->afterYamlPath = $this->getFixturePath('after2.yaml');
 
         $this->resultPath = $this->getFixturePath('result2.txt');
-        $this->resultPlainPath = $this->getFixturePath('resultPlain.txt');
+        $this->resultPlainPath = $this->getFixturePath('resultPlainPath.txt');
     }
 
     public function getFixturePath(string $fixtureName): string
