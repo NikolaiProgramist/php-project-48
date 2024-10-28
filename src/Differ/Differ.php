@@ -2,9 +2,9 @@
 
 namespace Differ\Differ\Differ;
 
+use function Differ\Formatters\selectFormatter;
 use function Functional\sort;
 use function Differ\Differ\Translator\getJson;
-use function Differ\Formatters\Stylish\stylish;
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {
@@ -15,12 +15,7 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     $elements2 = sortingSecondFile($secondFile, $firstFile);
 
     $resultDiff = sortArrayByKeysRecursive(array_merge_recursive($elements, $elements2));
-
-    if ($format === 'stylish') {
-        return stylish($resultDiff);
-    }
-
-    return stylish($resultDiff);
+    return selectFormatter($resultDiff, $format);
 }
 
 function sortingFirstFile($tree1, $tree2)

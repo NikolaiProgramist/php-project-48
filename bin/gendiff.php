@@ -27,7 +27,6 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-$argv = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
-$format = $argv['<fmt>'] ?? 'stylish';
+$args = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
 
-parse($argv['<firstFile>'], $argv['<secondFile>'], $format);
+parse($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
