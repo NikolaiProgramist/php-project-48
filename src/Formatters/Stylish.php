@@ -48,19 +48,25 @@ function getStylish($tree, string $replacer, int $spacesCount, int $depth = 1): 
                 return $acc;
             }
 
-            if (!is_array($keyData['beforeValue'])) {
-                $acc .= getStylishString(REMOVE_MARKER, $key, $keyData['beforeValue'], $indentation);
-            } else {
-                $innerContent = getStylish($keyData['beforeValue'], $replacer, $spacesCount, $depth + 1);
-                $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
-            }
+            $acc .= getChangedString(
+                REMOVE_MARKER,
+                $keyData['beforeValue'],
+                $key,
+                $indentation,
+                $replacer,
+                $spacesCount,
+                $depth
+            );
 
-            if (!is_array($keyData['afterValue'])) {
-                $acc .= getStylishString(ADD_MARKER, $key, $keyData['afterValue'], $indentation);
-            } else {
-                $innerContent = getStylish($keyData['afterValue'], $replacer, $spacesCount, $depth + 1);
-                $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
-            }
+            $acc .= getChangedString(
+                ADD_MARKER,
+                $keyData['afterValue'],
+                $key,
+                $indentation,
+                $replacer,
+                $spacesCount,
+                $depth
+            );
 
             return $acc;
         },
@@ -101,6 +107,25 @@ function getStylishString(string $marker, string $key, $value, string $indentati
     } else {
         return $indentation . "{$marker} {$key}: {$keyValue}\n";
     }
+}
+
+function getChangedString(
+    string $marker,
+    $value,
+    string $key,
+    string $indentation,
+    string $replacer,
+    string $spacesCount,
+    int $depth
+): string {
+    if (!is_array($value)) {
+        $result = getStylishString($marker, $key, $value, $indentation);
+    } else {
+        $innerContent = getStylish($value, $replacer, $spacesCount, $depth + 1);
+        $result = getStylishInnerContent($marker, $key, $innerContent, $indentation);
+    }
+
+    return $result;
 }
 
 function getString($string): string
