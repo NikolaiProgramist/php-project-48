@@ -48,24 +48,24 @@ function getStylish($tree, string $replacer, int $spacesCount, int $depth = 1): 
                 return $acc;
             }
 
+            $data = [
+                'indentation' => $indentation,
+                'replacer' => $replacer,
+                'spacesCount' => $spacesCount,
+                'depth' => $depth];
+
             $acc .= getChangedString(
                 REMOVE_MARKER,
                 $keyData['beforeValue'],
                 $key,
-                $indentation,
-                $replacer,
-                $spacesCount,
-                $depth
+                $data
             );
 
             $acc .= getChangedString(
                 ADD_MARKER,
                 $keyData['afterValue'],
                 $key,
-                $indentation,
-                $replacer,
-                $spacesCount,
-                $depth
+                $data
             );
 
             return $acc;
@@ -109,20 +109,13 @@ function getStylishString(string $marker, string $key, $value, string $indentati
     }
 }
 
-function getChangedString(
-    string $marker,
-    $value,
-    string $key,
-    string $indentation,
-    string $replacer,
-    string $spacesCount,
-    int $depth
-): string {
+function getChangedString(string $marker, $value, string $key, array $data): string
+{
     if (!is_array($value)) {
-        $result = getStylishString($marker, $key, $value, $indentation);
+        $result = getStylishString($marker, $key, $value, $data['indentation']);
     } else {
-        $innerContent = getStylish($value, $replacer, $spacesCount, $depth + 1);
-        $result = getStylishInnerContent($marker, $key, $innerContent, $indentation);
+        $innerContent = getStylish($value, $data['replacer'], $data['spacesCount'], $data['depth'] + 1);
+        $result = getStylishInnerContent($marker, $key, $innerContent, $data['indentation']);
     }
 
     return $result;
