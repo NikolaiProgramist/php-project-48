@@ -13,6 +13,7 @@ class DifferTest extends TestCase
     private string $afterYamlPath;
     private string $beforeYamlPath;
     private string $resultPath;
+    private string $resultPlainPath;
 
     public function setUp(): void
     {
@@ -23,6 +24,7 @@ class DifferTest extends TestCase
         $this->afterYamlPath = $this->getFixturePath('after2.yaml');
 
         $this->resultPath = $this->getFixturePath('result2.txt');
+        $this->resultPlainPath = $this->getFixturePath('resultPlain.txt');
     }
 
     public function getFixturePath(string $fixtureName): string
@@ -46,6 +48,15 @@ class DifferTest extends TestCase
             genDiff(
                 $this->beforeYamlPath,
                 $this->afterYamlPath
+            )
+        );
+
+        assertEquals(
+            file_get_contents($this->resultPlainPath),
+            genDiff(
+                $this->beforeYamlPath,
+                $this->afterYamlPath,
+                'plain'
             )
         );
     }
