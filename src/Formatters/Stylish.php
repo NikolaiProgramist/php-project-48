@@ -6,9 +6,15 @@ const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
 const UNCHANGED_MARKER = ' ';
 
-function stylish($tree, string $replacer = ' ', int $spacesCount = 4, int $depth = 1): string
+function stylish($tree, string $replacer = ' ', int $spacesCount = 4): string
 {
-    $child = array_reduce(
+    $result = getStylish($tree, $replacer, $spacesCount);
+    return "{\n{$result}}";
+}
+
+function getStylish($tree, string $replacer, int $spacesCount, int $depth = 1): string
+{
+    return array_reduce(
         array_keys($tree),
         function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
             $keyData = $tree[$key];
@@ -37,7 +43,7 @@ function stylish($tree, string $replacer = ' ', int $spacesCount = 4, int $depth
                     return $acc;
                 }
 
-                $innerContent = stylish($keyData['value'], $replacer, $spacesCount, $depth + 1);
+                $innerContent = getStylish($keyData['value'], $replacer, $spacesCount, $depth + 1);
                 $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
                 return $acc;
             }
@@ -45,14 +51,14 @@ function stylish($tree, string $replacer = ' ', int $spacesCount = 4, int $depth
             if (!is_array($keyData['beforeValue'])) {
                 $acc .= getStylishString(REMOVE_MARKER, $key, $keyData['beforeValue'], $indentation);
             } else {
-                $innerContent = stylish($keyData['beforeValue'], $replacer, $spacesCount, $depth + 1);
+                $innerContent = getStylish($keyData['beforeValue'], $replacer, $spacesCount, $depth + 1);
                 $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
             }
 
             if (!is_array($keyData['afterValue'])) {
                 $acc .= getStylishString(ADD_MARKER, $key, $keyData['afterValue'], $indentation);
             } else {
-                $innerContent = stylish($keyData['afterValue'], $replacer, $spacesCount, $depth + 1);
+                $innerContent = getStylish($keyData['afterValue'], $replacer, $spacesCount, $depth + 1);
                 $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
             }
 
@@ -60,12 +66,6 @@ function stylish($tree, string $replacer = ' ', int $spacesCount = 4, int $depth
         },
         ''
     );
-
-    if ($depth === 1) {
-        return "{\n{$child}}";
-    }
-
-    return "{$child}";
 }
 
 function getArrayContent($tree, string $replacer, int $spacesCount, int $depth): string
