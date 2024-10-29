@@ -3,7 +3,7 @@
 namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Differ\Differ\Differ\genDiff;
+use function Differ\Differ\genDiff;
 use function PHPUnit\Framework\assertEquals;
 
 class DifferTest extends TestCase
