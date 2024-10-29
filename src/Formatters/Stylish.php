@@ -19,6 +19,7 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
         function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
             $keyData = $tree[$key];
             $statusName = $tree[$key]['status'] ?? 'add';
+            $resultString = $acc;
 
             $status = match ($statusName) {
                 'add' => ADD_MARKER,
@@ -33,42 +34,43 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
                 $value = $keyData['value'];
 
                 if (!is_array($value)) {
-                    $acc .= getStylishString($status, $key, $value, $indentation);
-                    return $acc;
+                    $string = getStylishString($status, $key, $value, $indentation);
+                    return "{$resultString}{$string}";
                 }
 
                 if ($status === ADD_MARKER) {
                     $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
-                    $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
-                    return $acc;
+                    $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
+                    return "{$resultString}{$string}";
                 }
 
                 $innerContent = getStylish($keyData['value'], $replacer, $spacesCount, $depth + 1);
-                $acc .= getStylishInnerContent($status, $key, $innerContent, $indentation);
-                return $acc;
+                $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
+                return "{$resultString}{$string}";
             }
 
             $data = [
                 'indentation' => $indentation,
                 'replacer' => $replacer,
                 'spacesCount' => $spacesCount,
-                'depth' => $depth];
+                'depth' => $depth
+            ];
 
-            $acc .= getChangedString(
+            $stringBefore = getChangedString(
                 REMOVE_MARKER,
                 $keyData['beforeValue'],
                 $key,
                 $data
             );
 
-            $acc .= getChangedString(
+            $stringAfter = getChangedString(
                 ADD_MARKER,
                 $keyData['afterValue'],
                 $key,
                 $data
             );
 
-            return $acc;
+            return "{$resultString}{$stringBefore}{$stringAfter}";
         },
         ''
     );
@@ -80,10 +82,11 @@ function getArrayContent(array $tree, string $replacer, int $spacesCount, int $d
         $value = $tree[$key]['value'];
         $indentationCount = $spacesCount * $depth - 2;
         $indentation = str_repeat($replacer, $indentationCount);
+        $resultString = $acc;
 
         if (!is_array($value)) {
-            $acc .= getStylishString(UNCHANGED_MARKER, $key, $value, $indentation);
-            return $acc;
+            $string = getStylishString(UNCHANGED_MARKER, $key, $value, $indentation);
+            return "{$resultString}{$string}";
         }
 
         $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
