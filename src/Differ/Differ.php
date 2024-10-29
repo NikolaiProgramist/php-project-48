@@ -4,7 +4,7 @@ namespace Differ\Differ;
 
 use function Differ\Formatters\selectFormatter;
 use function Functional\sort;
-use function Differ\Differ\Translator\getJson;
+use function Differ\Translator\getJson;
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {

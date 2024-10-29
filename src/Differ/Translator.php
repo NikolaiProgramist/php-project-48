@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Differ\Translator;
+namespace Differ\Translator;
 
 use Symfony\Component\Yaml\Yaml;
 
