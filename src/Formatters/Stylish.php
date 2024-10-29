@@ -6,13 +6,13 @@ const ADD_MARKER = '+';
 const REMOVE_MARKER = '-';
 const UNCHANGED_MARKER = ' ';
 
-function stylish($tree, string $replacer = ' ', int $spacesCount = 4): string
+function stylish(array $tree, string $replacer = ' ', int $spacesCount = 4): string
 {
     $result = getStylish($tree, $replacer, $spacesCount);
     return "{\n{$result}}";
 }
 
-function getStylish($tree, string $replacer, int $spacesCount, int $depth = 1): string
+function getStylish(array $tree, string $replacer, int $spacesCount, int $depth = 1): string
 {
     return array_reduce(
         array_keys($tree),
@@ -98,7 +98,7 @@ function getStylishInnerContent(string $marker, string $key, string $innerConten
     return $result;
 }
 
-function getStylishString(string $marker, string $key, $value, string $indentation): string
+function getStylishString(string $marker, int|string $key, mixed $value, string $indentation): string
 {
     $keyValue = getString($value);
     return $indentation . "{$marker} {$key}: {$keyValue}\n";

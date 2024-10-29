@@ -6,7 +6,7 @@ const ADD_MARKER = 'added';
 const REMOVE_MARKER = 'removed';
 const UPDATED_MARKER = 'updated';
 
-function plain($tree, string $path = '', int $depth = 1): string
+function plain(array $tree, string $path = '', int $depth = 1): string
 {
     return array_reduce(
         array_keys($tree),
@@ -45,7 +45,7 @@ function plain($tree, string $path = '', int $depth = 1): string
     );
 }
 
-function getString($string): string
+function getString(mixed $string): string
 {
     if (is_bool($string)) {
         return $string ? 'true' : 'false';
