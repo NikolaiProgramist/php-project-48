@@ -101,12 +101,7 @@ function getStylishInnerContent(string $marker, string $key, string $innerConten
 function getStylishString(string $marker, string $key, $value, string $indentation): string
 {
     $keyValue = getString($value);
-
-    if ($value === '') {
-        return $indentation . "{$marker} {$key}:\n";
-    } else {
-        return $indentation . "{$marker} {$key}: {$keyValue}\n";
-    }
+    return $indentation . "{$marker} {$key}: {$keyValue}\n";
 }
 
 function getChangedString(string $marker, $value, string $key, array $data): string
