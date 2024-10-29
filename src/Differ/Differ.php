@@ -18,7 +18,7 @@ function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'sty
     return selectFormatter($resultDiff, $format);
 }
 
-function sortingFirstFile($tree1, $tree2)
+function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
 {
     if (!is_array($tree1)) {
         return $tree1;
@@ -61,7 +61,7 @@ function sortingFirstFile($tree1, $tree2)
     );
 }
 
-function sortingSecondFile($tree2, $tree1)
+function sortingSecondFile(mixed $tree2, mixed $tree1): mixed
 {
     if (!is_array($tree2)) {
         return $tree2;
@@ -86,7 +86,7 @@ function sortingSecondFile($tree2, $tree1)
     );
 }
 
-function getArrayContent($tree)
+function getArrayContent(mixed $tree): mixed
 {
     if (!is_array($tree)) {
         return $tree;
