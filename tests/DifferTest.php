@@ -12,21 +12,21 @@ class DifferTest extends TestCase
     private string $beforeJsonPath;
     private string $afterYamlPath;
     private string $beforeYamlPath;
-    private string $resultPath;
+    private string $resultStylishPath;
     private string $resultPlainPath;
     private string $resultJsonPath;
 
     public function setUp(): void
     {
-        $this->beforeJsonPath = $this->getFixturePath('before2.json');
-        $this->afterJsonPath = $this->getFixturePath('after2.json');
+        $this->beforeJsonPath = $this->getFixturePath('before.json');
+        $this->afterJsonPath = $this->getFixturePath('after.json');
 
-        $this->beforeYamlPath = $this->getFixturePath('before2.yaml');
-        $this->afterYamlPath = $this->getFixturePath('after2.yaml');
+        $this->beforeYamlPath = $this->getFixturePath('before.yaml');
+        $this->afterYamlPath = $this->getFixturePath('after.yaml');
 
-        $this->resultPath = $this->getFixturePath('result2.txt');
-        $this->resultPlainPath = $this->getFixturePath('resultPlainPath.txt');
-        $this->resultJsonPath = $this->getFixturePath('resultJsonPath.txt');
+        $this->resultStylishPath = $this->getFixturePath('resultStylish.txt');
+        $this->resultPlainPath = $this->getFixturePath('resultPlain.txt');
+        $this->resultJsonPath = $this->getFixturePath('resultJson.txt');
     }
 
     public function getFixturePath(string $fixtureName): string
@@ -38,7 +38,7 @@ class DifferTest extends TestCase
     public function testGenDiff(): void
     {
         assertEquals(
-            file_get_contents($this->resultPath),
+            file_get_contents($this->resultStylishPath),
             genDiff(
                 $this->beforeJsonPath,
                 $this->afterJsonPath
@@ -46,10 +46,19 @@ class DifferTest extends TestCase
         );
 
         assertEquals(
-            file_get_contents($this->resultPath),
+            file_get_contents($this->resultStylishPath),
             genDiff(
                 $this->beforeYamlPath,
                 $this->afterYamlPath
+            )
+        );
+
+        assertEquals(
+            file_get_contents($this->resultPlainPath),
+            genDiff(
+                $this->beforeJsonPath,
+                $this->afterJsonPath,
+                'plain'
             )
         );
 
@@ -67,6 +76,15 @@ class DifferTest extends TestCase
             genDiff(
                 $this->beforeYamlPath,
                 $this->afterYamlPath,
+                'json'
+            )
+        );
+
+        assertEquals(
+            file_get_contents($this->resultJsonPath),
+            genDiff(
+                $this->beforeJsonPath,
+                $this->afterJsonPath,
                 'json'
             )
         );
