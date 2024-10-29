@@ -74,7 +74,7 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
     );
 }
 
-function getArrayContent($tree, string $replacer, int $spacesCount, int $depth): string
+function getArrayContent(array $tree, string $replacer, int $spacesCount, int $depth): string
 {
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
         $value = $tree[$key]['value'];
@@ -91,7 +91,7 @@ function getArrayContent($tree, string $replacer, int $spacesCount, int $depth):
     }, '');
 }
 
-function getStylishInnerContent(string $marker, string $key, string $innerContent, string $indentation): string
+function getStylishInnerContent(string $marker, int|string $key, string $innerContent, string $indentation): string
 {
     $result = $indentation . $marker . " {$key}: {\n{$innerContent}";
     $result .= $indentation . "  }\n";
@@ -104,7 +104,7 @@ function getStylishString(string $marker, int|string $key, mixed $value, string 
     return $indentation . "{$marker} {$key}: {$keyValue}\n";
 }
 
-function getChangedString(string $marker, $value, string $key, array $data): string
+function getChangedString(string $marker, mixed $value, int|string $key, array $data): string
 {
     if (!is_array($value)) {
         $result = getStylishString($marker, $key, $value, $data['indentation']);
@@ -116,7 +116,7 @@ function getChangedString(string $marker, $value, string $key, array $data): str
     return $result;
 }
 
-function getString($string): string
+function getString(mixed $string): string
 {
     if (is_bool($string)) {
         return $string ? 'true' : 'false';
