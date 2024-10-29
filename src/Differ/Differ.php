@@ -31,8 +31,6 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
     return array_reduce(
         array_keys($tree1),
         function ($acc, $key) use ($tree1, $tree2) {
-            $acc[$key]['key'] = $key;
-
             if (!array_key_exists($key, $tree2)) {
                 $acc[$key]['status'] = 'remove';
                 $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
