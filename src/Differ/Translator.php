@@ -20,11 +20,12 @@ function getFileContent(string $path): string
     // Colors for beautiful :)
     $normalColor = "\x1b[0m";
     $redColor = "\x1b[41m";
+    $dirPath = __DIR__;
 
     if (str_starts_with($path, '/')) {
         $fullPath = $path;
     } else {
-        $fullPath = __DIR__ . '/../../' . $path;
+        $fullPath = "{$dirPath}/../../{$path}";
     }
 
     if (!file_exists($fullPath)) {
