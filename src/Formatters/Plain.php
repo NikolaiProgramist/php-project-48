@@ -34,7 +34,7 @@ function plain(array $tree, string $path = '', int $depth = 1): string
 
                 if (is_array($keyData['value'])) {
                     $string = plain($keyData['value'], $newPath, $depth + 1);
-                    $resultString = "{$resultString}{$string}";
+                    return "{$resultString}{$string}";
                 }
 
                 return $resultString;
