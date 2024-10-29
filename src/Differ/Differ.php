@@ -31,29 +31,31 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
     return array_reduce(
         array_keys($tree1),
         function ($acc, $key) use ($tree1, $tree2) {
+            $diff = [...$acc];
+
             if (!array_key_exists($key, $tree2)) {
-                $acc[$key]['status'] = 'remove';
+                $diff[$key]['status'] = 'remove';
                 $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
-                $acc[$key]['value'] = $innerContent;
-                return $acc;
+                $diff[$key]['value'] = $innerContent;
+                return $diff;
             }
 
             if ($tree1[$key] === $tree2[$key]) {
-                $acc[$key]['status'] = 'unchanged';
-                $acc[$key]['value'] = sortingFirstFile($tree1[$key], $tree1[$key]);
-                return $acc;
+                $diff[$key]['status'] = 'unchanged';
+                $diff[$key]['value'] = sortingFirstFile($tree1[$key], $tree1[$key]);
+                return $diff;
             }
 
             if (is_array($tree1[$key]) && is_array($tree2[$key])) {
-                $acc[$key]['status'] = 'changed';
-                $acc[$key]['value'] = sortingFirstFile($tree1[$key], $tree2[$key]);
+                $diff[$key]['status'] = 'changed';
+                $diff[$key]['value'] = sortingFirstFile($tree1[$key], $tree2[$key]);
             } else {
-                $acc[$key]['status'] = 'remove';
-                $acc[$key]['beforeValue'] = sortingFirstFile($tree1[$key], $tree1[$key]);
-                $acc[$key]['afterValue'] = sortingFirstFile($tree2[$key], $tree2[$key]);
+                $diff[$key]['status'] = 'remove';
+                $diff[$key]['beforeValue'] = sortingFirstFile($tree1[$key], $tree1[$key]);
+                $diff[$key]['afterValue'] = sortingFirstFile($tree2[$key], $tree2[$key]);
             }
 
-            return $acc;
+            return $diff;
         },
         []
     );
@@ -68,17 +70,19 @@ function sortingSecondFile(mixed $tree2, mixed $tree1): mixed
     return array_reduce(
         array_keys($tree2),
         function ($acc, $key) use ($tree1, $tree2) {
+            $diff = [...$acc];
+
             if (!array_key_exists($key, $tree1)) {
-                $acc[$key]['value'] = getArrayContent($tree2[$key]);
-                return $acc;
+                $diff[$key]['value'] = getArrayContent($tree2[$key]);
+                return $diff;
             }
 
             if (is_array($tree2[$key]) && is_array($tree1[$key])) {
-                $acc[$key]['value'] = sortingSecondFile($tree2[$key], $tree1[$key]);
-                return $acc;
+                $diff[$key]['value'] = sortingSecondFile($tree2[$key], $tree1[$key]);
+                return $diff;
             }
 
-            return $acc;
+            return $diff;
         },
         []
     );
@@ -91,8 +95,9 @@ function getArrayContent(mixed $tree): mixed
     }
 
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree) {
-        $acc[$key]['value'] = getArrayContent($tree[$key]);
-        return $acc;
+        $diff = [...$acc];
+        $diff[$key]['value'] = getArrayContent($tree[$key]);
+        return $diff;
     }, []);
 }
 
@@ -107,13 +112,15 @@ function sortArrayByKeysRecursive(array $tree): array
     );
 
     return array_reduce($keysSorted, function ($acc, $key) use ($tree) {
+        $diff = [...$acc];
+
         if (!is_array($tree[$key])) {
-            $acc[$key] = $tree[$key];
-            return $acc;
+            $diff[$key] = $tree[$key];
+            return $diff;
         }
 
         $innerContent = sortArrayByKeysRecursive($tree[$key]);
-        $acc[$key] = $innerContent;
-        return $acc;
+        $diff[$key] = $innerContent;
+        return $diff;
     }, []);
 }
