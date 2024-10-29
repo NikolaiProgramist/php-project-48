@@ -93,9 +93,7 @@ function getArrayContent(array $tree, string $replacer, int $spacesCount, int $d
 
 function getStylishInnerContent(string $marker, int|string $key, string $innerContent, string $indentation): string
 {
-    $result = "{$indentation}{$marker} {$key}: {\n{$innerContent}";
-    $result .= "{$indentation}  }\n";
-    return $result;
+    return "{$indentation}{$marker} {$key}: {\n{$innerContent}{$indentation}  }\n";
 }
 
 function getStylishString(string $marker, int|string $key, mixed $value, string $indentation): string
