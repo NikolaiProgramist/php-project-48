@@ -20,7 +20,7 @@
         }
     ],
     "bin": [
-        "bin/gendiff.php"
+      "bin/gendiff"
     ],
     "autoload": {
         "files": [
