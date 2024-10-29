@@ -23,17 +23,18 @@ function plain(array $tree, string $path = '', int $depth = 1): string
                 $value = getString($keyData['value']);
 
                 if ($status === 'add') {
-                    $resultString .= "Property '{$newPath}' was {$addMarker} with value: {$value}\n";
-                    return $resultString;
+                    $string = "Property '{$newPath}' was {$addMarker} with value: {$value}\n";
+                    return "{$resultString}{$string}";
                 }
 
                 if ($status === 'remove') {
-                    $resultString .= "Property '{$newPath}' was {$removeMarker}\n";
-                    return $resultString;
+                    $string = "Property '{$newPath}' was {$removeMarker}\n";
+                    return "{$resultString}{$string}";
                 }
 
                 if (is_array($keyData['value'])) {
-                    $resultString .= plain($keyData['value'], $newPath, $depth + 1);
+                    $string = plain($keyData['value'], $newPath, $depth + 1);
+                    $resultString = "{$resultString}{$string}";
                 }
 
                 return $resultString;
@@ -42,8 +43,8 @@ function plain(array $tree, string $path = '', int $depth = 1): string
             $beforeValue = getString($keyData['beforeValue']);
             $afterValue = getString($keyData['afterValue']);
 
-            $resultString .= "Property '{$newPath}' was {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
-            return $resultString;
+            $string = "Property '{$newPath}' was {$updatedMarker}. From {$beforeValue} to {$afterValue}\n";
+            return "{$resultString}{$string}";
         },
         ''
     );
