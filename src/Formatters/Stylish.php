@@ -18,9 +18,9 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
         array_keys($tree),
         function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
             $keyData = $tree[$key];
-            $status = $tree[$key]['status'] ?? 'add';
+            $statusName = $tree[$key]['status'] ?? 'add';
 
-            $status = match ($status) {
+            $status = match ($statusName) {
                 'add' => ADD_MARKER,
                 'remove' => REMOVE_MARKER,
                 default => UNCHANGED_MARKER
