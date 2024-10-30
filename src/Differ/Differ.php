@@ -37,8 +37,7 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
             if (!array_key_exists($key, $tree2)) {
                 $result = addDataToArray($diff, $key, 'status', 'remove');
                 $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
-                $result[$key]['value'] = $innerContent;
-                return $result;
+                return addDataToArray($result, $key, 'value', $innerContent);
             }
 
             if ($tree1[$key] === $tree2[$key]) {
