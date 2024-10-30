@@ -3,7 +3,6 @@
 namespace Differ\Differ;
 
 use function Differ\Formatters\selectFormatter;
-use function Functional\flatten;
 use function Functional\sort;
 use function Differ\Translator\getJson;
 
@@ -35,22 +34,27 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
             $diff = [...$acc];
 
             if (!array_key_exists($key, $tree2)) {
-                $result = addDataToArray($diff, $key, 'status', 'remove');
+                $status[$key]['status'] = 'remove';
+                $diff = array_merge($diff, $status);
                 $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
-                return addDataToArray($result, $key, 'value', $innerContent);
+                $diff[$key]['value'] = $innerContent;
+                return $diff;
             }
 
             if ($tree1[$key] === $tree2[$key]) {
-                $diff = addDataToArray($diff, $key, 'status', 'unchanged');
+                $status[$key]['status'] = 'unchanged';
+                $diff = array_merge($diff, $status);
                 $diff[$key]['value'] = sortingFirstFile($tree1[$key], $tree1[$key]);
                 return $diff;
             }
 
             if (is_array($tree1[$key]) && is_array($tree2[$key])) {
-                $diff = addDataToArray($diff, $key, 'status', 'changed');
+                $status[$key]['status'] = 'changed';
+                $diff = array_merge($diff, $status);
                 $diff[$key]['value'] = sortingFirstFile($tree1[$key], $tree2[$key]);
             } else {
-                $diff = addDataToArray($diff, $key, 'status', 'remove');
+                $status[$key]['status'] = 'remove';
+                $diff = array_merge($diff, $status);
                 $diff[$key]['beforeValue'] = sortingFirstFile($tree1[$key], $tree1[$key]);
                 $diff[$key]['afterValue'] = sortingFirstFile($tree2[$key], $tree2[$key]);
             }
@@ -71,7 +75,6 @@ function sortingSecondFile(mixed $tree2, mixed $tree1): mixed
         array_keys($tree2),
         function ($acc, $key) use ($tree1, $tree2) {
             $diff = [...$acc];
-            $value = [];
 
             if (!array_key_exists($key, $tree1)) {
                 $value[$key]['value'] = getArrayContent($tree2[$key]);
@@ -97,8 +100,8 @@ function getArrayContent(mixed $tree): mixed
 
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree) {
         $diff = [...$acc];
-        $value = getArrayContent($tree[$key]);
-        return addDataToArray($diff, $key, 'value', $value);
+        $value[$key]['value'] = getArrayContent($tree[$key]);
+        return array_merge($diff, $value);
     }, []);
 }
 
@@ -114,8 +117,6 @@ function sortArrayByKeysRecursive(array $tree): array
 
     return array_reduce($keysSorted, function ($acc, $key) use ($tree) {
         $diff = [...$acc];
-        $diffValue = [];
-        $diffContent = [];
 
         if (!is_array($tree[$key])) {
             $diffValue[$key] = $tree[$key];
@@ -126,12 +127,4 @@ function sortArrayByKeysRecursive(array $tree): array
         $diffContent[$key] = $innerContent;
         return array_merge($diff, $diffContent);
     }, []);
-}
-
-function addDataToArray(array $tree, string $key, string $treeKey, string|array $value): array
-{
-    $diff = $tree;
-    $newValue[$key][$treeKey] = $value;
-
-    return array_merge($diff, $newValue);
 }
