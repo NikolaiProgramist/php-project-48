@@ -3,6 +3,7 @@
 namespace Differ\Differ;
 
 use function Differ\Formatters\selectFormatter;
+use function Functional\flatten;
 use function Functional\sort;
 use function Differ\Translator\getJson;
 
@@ -97,9 +98,8 @@ function getArrayContent(mixed $tree): mixed
 
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree) {
         $diff = [...$acc];
-        $value = [];
-        $value[$key]['value'] = getArrayContent($tree[$key]);
-        return array_merge($diff, $value);
+        $value = getArrayContent($tree[$key]);
+        return addDataToArray($diff, $key, 'value', $value);
     }, []);
 }
 
@@ -132,10 +132,7 @@ function sortArrayByKeysRecursive(array $tree): array
 function addDataToArray(array $tree, string $key, string $treeKey, string|array $value): array
 {
     $diff = $tree;
+    $newValue[$key][$treeKey] = $value;
 
-    if (!is_array($value)) {
-        $diff[$key][$treeKey] = $value;
-    }
-
-    return $diff;
+    return array_merge($diff, $newValue);
 }
