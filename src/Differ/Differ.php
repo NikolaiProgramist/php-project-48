@@ -76,19 +76,17 @@ function sortingSecondFile(mixed $tree2, mixed $tree1): mixed
     return array_reduce(
         array_keys($tree2),
         function ($acc, $key) use ($tree1, $tree2) {
-            $diff = [...$acc];
-
             if (!array_key_exists($key, $tree1)) {
-                $value[$key]['value'] = getArrayContent($tree2[$key]);
-                return array_merge($diff, $value);
+                $value = [$key => ['value' => getArrayContent($tree2[$key])]];
+                return array_merge($acc, $value);
             }
 
             if (is_array($tree2[$key]) && is_array($tree1[$key])) {
-                $value[$key]['value'] = sortingSecondFile($tree2[$key], $tree1[$key]);
-                return array_merge($diff, $value);
+                $value = [$key => ['value' => sortingSecondFile($tree2[$key], $tree1[$key])]];
+                return array_merge($acc, $value);
             }
 
-            return $diff;
+            return $acc;
         },
         []
     );
@@ -101,32 +99,23 @@ function getArrayContent(mixed $tree): mixed
     }
 
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree) {
-        $diff = [...$acc];
-        $value[$key]['value'] = getArrayContent($tree[$key]);
-        return array_merge($diff, $value);
+        $value = [$key => ['value' => getArrayContent($tree[$key])]];
+        return array_merge($acc, $value);
     }, []);
 }
 
 function sortArrayByKeysRecursive(array $tree): array
 {
-    $keysSorted = sort(
-        array_keys($tree),
-        function ($left, $right) {
-            return strcmp($left, $right);
-        },
-        true
-    );
+    $keysSorted = sort(array_keys($tree), fn($left, $right) => strcmp($left, $right), true);
 
     return array_reduce($keysSorted, function ($acc, $key) use ($tree) {
-        $diff = [...$acc];
-
         if (!is_array($tree[$key])) {
-            $diffValue[$key] = $tree[$key];
-            return array_merge($diff, $diffValue);
+            $value = [$key => $tree[$key]];
+            return array_merge($acc, $value);
         }
 
         $innerContent = sortArrayByKeysRecursive($tree[$key]);
         $diffContent[$key] = $innerContent;
-        return array_merge($diff, $diffContent);
+        return array_merge($acc, $diffContent);
     }, []);
 }
