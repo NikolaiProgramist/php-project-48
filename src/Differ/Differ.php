@@ -32,30 +32,35 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
         array_keys($tree1),
         function ($acc, $key) use ($tree1, $tree2) {
             if (!array_key_exists($key, $tree2)) {
-                $diff = array_merge($acc, [$key => ['status' => 'remove']]);
                 $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
                 $valueName = is_array($innerContent) ? 'children' : 'value';
-                $diff[$key][$valueName] = $innerContent;
-                return $diff;
+                return array_merge($acc, [$key => ['status' => 'remove', $valueName => $innerContent]]);
             }
 
             if ($tree1[$key] === $tree2[$key]) {
-                $diff = array_merge($acc, [$key => ['status' => 'unchanged']]);
-                $valueName = is_array(sortingFirstFile($tree1[$key], $tree1[$key])) ? 'children' : 'value';
-                $diff[$key][$valueName] = sortingFirstFile($tree1[$key], $tree1[$key]);
-                return $diff;
+                $innerContent = sortingFirstFile($tree1[$key], $tree1[$key]);
+                $valueName = is_array($innerContent) ? 'children' : 'value';
+                return array_merge($acc, [$key => ['status' => 'unchanged', $valueName => $innerContent]]);
             }
 
             if (is_array($tree1[$key]) && is_array($tree2[$key])) {
-                $diff = array_merge($acc, [$key => ['status' => 'changed']]);
-                $diff[$key]['children'] = sortingFirstFile($tree1[$key], $tree2[$key]);
+                $innerContent = sortingFirstFile($tree1[$key], $tree2[$key]);
+                return array_merge($acc, [$key => ['status' => 'changed', 'children' => $innerContent]]);
             } else {
-                $diff = array_merge($acc, [$key => ['status' => 'remove']]);
-                $diff[$key]['beforeValue'] = sortingFirstFile($tree1[$key], $tree1[$key]);
-                $diff[$key]['afterValue'] = sortingFirstFile($tree2[$key], $tree2[$key]);
-            }
+                $beforeValue = sortingFirstFile($tree1[$key], $tree1[$key]);
+                $afterValue = sortingFirstFile($tree2[$key], $tree2[$key]);
 
-            return $diff;
+                return array_merge(
+                    $acc,
+                    [
+                        $key => [
+                            'status' => 'remove',
+                            'beforeValue' => $beforeValue,
+                            'afterValue' => $afterValue
+                        ]
+                    ]
+                );
+            }
         },
         []
     );
