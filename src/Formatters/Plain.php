@@ -14,10 +14,32 @@ function plain(array $tree, string $path = '', int $depth = 1): string
             $keyData = $tree[$key];
             $status = $tree[$key]['status'] ?? 'add';
             $newPath = $depth === 1 ? $key : "{$path}.{$key}";
+            $resultString = $acc;
+
             $addMarker = ADD_MARKER;
             $removeMarker = REMOVE_MARKER;
             $updatedMarker = UPDATED_MARKER;
-            $resultString = $acc;
+
+            if ($status === 'unchanged') {
+                return $resultString;
+            }
+
+            if (array_key_exists('children', $keyData)) {
+                $value = getString($keyData['children']);
+
+                if ($status === 'add') {
+                    $string = "Property '{$newPath}' was {$addMarker} with value: {$value}\n";
+                    return "{$resultString}{$string}";
+                }
+
+                if ($status === 'remove') {
+                    $string = "Property '{$newPath}' was {$removeMarker}\n";
+                    return "{$resultString}{$string}";
+                }
+
+                $string = plain($keyData['children'], $newPath, $depth + 1);
+                return "{$resultString}{$string}";
+            }
 
             if (array_key_exists('value', $keyData)) {
                 $value = getString($keyData['value']);
@@ -31,13 +53,6 @@ function plain(array $tree, string $path = '', int $depth = 1): string
                     $string = "Property '{$newPath}' was {$removeMarker}\n";
                     return "{$resultString}{$string}";
                 }
-
-                if (is_array($keyData['value'])) {
-                    $string = plain($keyData['value'], $newPath, $depth + 1);
-                    return "{$resultString}{$string}";
-                }
-
-                return $resultString;
             }
 
             $beforeValue = getString($keyData['beforeValue']);

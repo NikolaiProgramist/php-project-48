@@ -30,13 +30,8 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
             $indentationCount = $spacesCount * $depth - 2;
             $indentation = str_repeat($replacer, $indentationCount);
 
-            if (array_key_exists('value', $keyData)) {
-                $value = $keyData['value'];
-
-                if (!is_array($value)) {
-                    $string = getStylishString($status, $key, $value, $indentation);
-                    return "{$resultString}{$string}";
-                }
+            if (array_key_exists('children', $keyData)) {
+                $value = $keyData['children'];
 
                 if ($status === ADD_MARKER) {
                     $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
@@ -44,8 +39,14 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
                     return "{$resultString}{$string}";
                 }
 
-                $innerContent = getStylish($keyData['value'], $replacer, $spacesCount, $depth + 1);
+                $innerContent = getStylish($value, $replacer, $spacesCount, $depth + 1);
                 $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
+                return "{$resultString}{$string}";
+            }
+
+            if (array_key_exists('value', $keyData)) {
+                $value = $keyData['value'];
+                $string = getStylishString($status, $key, $value, $indentation);
                 return "{$resultString}{$string}";
             }
 
@@ -79,16 +80,17 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
 function getArrayContent(array $tree, string $replacer, int $spacesCount, int $depth): string
 {
     return array_reduce(array_keys($tree), function ($acc, $key) use ($tree, $replacer, $spacesCount, $depth) {
-        $value = $tree[$key]['value'];
         $indentationCount = $spacesCount * $depth - 2;
         $indentation = str_repeat($replacer, $indentationCount);
         $resultString = $acc;
 
-        if (!is_array($value)) {
+        if (array_key_exists('value', $tree[$key])) {
+            $value = $tree[$key]['value'];
             $string = getStylishString(UNCHANGED_MARKER, $key, $value, $indentation);
             return "{$resultString}{$string}";
         }
 
+        $value = $tree[$key]['children'];
         $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
         return getStylishInnerContent(UNCHANGED_MARKER, $key, $innerContent, $indentation);
     }, '');
