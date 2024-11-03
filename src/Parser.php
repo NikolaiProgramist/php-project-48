@@ -3,6 +3,7 @@
 namespace Differ\Parser;
 
 use JetBrains\PhpStorm\NoReturn;
+
 use function cli\line;
 use function Differ\Differ\genDiff;
 
