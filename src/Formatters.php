@@ -8,12 +8,9 @@ use function Differ\Formatters\Json\json;
 
 function selectFormatter(array $tree, string $format): string
 {
-    switch ($format) {
-        case 'plain':
-            return plain($tree);
-        case 'json':
-            return json($tree);
-        default:
-            return stylish($tree);
-    }
+    return match ($format) {
+        'plain' => plain($tree),
+        'json' => json($tree),
+        default => stylish($tree),
+    };
 }
