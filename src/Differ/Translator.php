@@ -3,6 +3,7 @@
 namespace Differ\Translator;
 
 use Symfony\Component\Yaml\Yaml;
+
 use function Differ\Parser\parseError;
 
 function getJson(string $path): array

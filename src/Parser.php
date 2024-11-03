@@ -2,18 +2,22 @@
 
 namespace Differ\Parser;
 
-use JetBrains\PhpStorm\NoReturn;
 use function cli\line;
 use function Differ\Differ\genDiff;
 
-function parse(string $pathToFile1, string $pathToFile2, string $format): void
+function parse(string $string): void
 {
-    $resultString = genDiff($pathToFile1, $pathToFile2, $format);
-    line('%s', $resultString);
+    line('%s', $string);
+    exit();
 }
 
-#[NoReturn] function parseError(string $errorMessage): void
+function parseDiff(string $pathToFile1, string $pathToFile2, string $format): void
 {
-    line('%s', $errorMessage);
-    exit();
+    $resultString = genDiff($pathToFile1, $pathToFile2, $format);
+    parse($resultString);
+}
+
+function parseError(string $errorMessage): void
+{
+    parse($errorMessage);
 }
