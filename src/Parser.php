@@ -7,5 +7,6 @@ use function Differ\Differ\genDiff;
 
 function parse(string $pathToFile1, string $pathToFile2, string $format): void
 {
-    line(genDiff($pathToFile1, $pathToFile2, $format));
+    $resultString = genDiff($pathToFile1, $pathToFile2, $format);
+    line($resultString);
 }

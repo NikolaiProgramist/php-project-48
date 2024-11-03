@@ -4,8 +4,6 @@ namespace Differ\Translator;
 
 use Symfony\Component\Yaml\Yaml;
 
-use function cli\line;
-
 function getJson(string $path): array
 {
     if (str_ends_with($path, '.yaml') || str_ends_with($path, '.yml')) {
@@ -29,14 +27,11 @@ function getFileContent(string $path): string
     }
 
     if (!file_exists($fullPath)) {
-        $errorMessage = <<<DOC
+        return <<<DOC
         {$redColor}ERROR!{$normalColor}
         
         File: "{$fullPath}" don't exists!
         DOC;
-
-        line($errorMessage);
-        exit;
     }
 
     return file_get_contents($fullPath);
