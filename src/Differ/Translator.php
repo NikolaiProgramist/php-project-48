@@ -15,7 +15,7 @@ function getJson(string $path): array
     return json_decode($content, true);
 }
 
-function getFileContent(string $path): string|false
+function getFileContent(string $path): string
 {
     $dirPath = __DIR__;
 
