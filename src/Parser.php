@@ -2,10 +2,35 @@
 
 namespace Differ\Parser;
 
-use function Differ\Differ\genDiff;
+use Symfony\Component\Yaml\Yaml;
 
-function parse(string $pathToFile1, string $pathToFile2, string $format): void
+use function Differ\Formatters\selectFormatter;
+
+function parse(array $resultDiff, string $format): string
 {
-    $resultString = genDiff($pathToFile1, $pathToFile2, $format);
-    echo $resultString;
+    return selectFormatter($resultDiff, $format);
+}
+
+function parseToJson(string $path): array
+{
+    $content = getFileContent($path);
+
+    if (str_ends_with($path, '.yaml') || str_ends_with($path, '.yml')) {
+        return Yaml::parse($content);
+    }
+
+    return json_decode($content, true);
+}
+
+function getFileContent(string $path): string
+{
+    $dirPath = __DIR__;
+
+    if (str_starts_with($path, '/')) {
+        $fullPath = $path;
+    } else {
+        $fullPath = "{$dirPath}/../../{$path}";
+    }
+
+    return file_get_contents($fullPath);
 }

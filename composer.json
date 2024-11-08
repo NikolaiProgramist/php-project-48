@@ -26,7 +26,6 @@
         "files": [
             "src/Parser.php",
             "src/Differ/Differ.php",
-            "src/Differ/Translator.php",
             "src/Formatters.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Plain.php",

@@ -2,20 +2,20 @@
 
 namespace Differ\Differ;
 
-use function Differ\Formatters\selectFormatter;
 use function Functional\sort;
-use function Differ\Translator\getJson;
+use function Differ\Parser\parse;
+use function Differ\Parser\parseToJson;
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {
-    $firstFile = getJson($pathToFile1);
-    $secondFile = getJson($pathToFile2);
+    $firstFile = parseToJson($pathToFile1);
+    $secondFile = parseToJson($pathToFile2);
 
     $elements = sortingFirstFile($firstFile, $secondFile);
     $elements2 = sortingSecondFile($secondFile, $firstFile);
 
     $resultDiff = sortArrayByKeysRecursive(array_merge_recursive($elements, $elements2));
-    return selectFormatter($resultDiff, $format);
+    return parse($resultDiff, $format);
 }
 
 function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
