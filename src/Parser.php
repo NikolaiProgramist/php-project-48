@@ -14,11 +14,11 @@ function parse(array $resultDiff, string $format): string
 function parseToJson(string $path): array
 {
     $content = getFileContent($path);
-    $extension = substr($path, strpos($path, '.') + 1);
+    $extension = substr($path, strpos($path, '.'));
 
     return match ($extension) {
-        'json' => json_decode($content, true),
-        'yaml' => Yaml::parse($content),
+        '.json' => json_decode($content, true),
+        '.yaml' => Yaml::parse($content),
         default => throw new \Exception("There is no such extension: {$extension}")
     };
 }
