@@ -25,11 +25,12 @@ function parseToJson(string $path): array
     }
 
     $extension = substr($path, $offset + 1);
+    $message = "The file format is not supported by the current version of the program: {$extension}";
 
     return match ($extension) {
         'json' => json_decode($content, true),
         'yaml' => Yaml::parse($content),
-        default => throw new Exception("The file format is not supported by the current version of the program: {$extension}")
+        default => throw new Exception($message)
     };
 }
 
