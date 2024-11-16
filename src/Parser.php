@@ -18,7 +18,8 @@ function parseToJson(string $path): array
 
     return match ($extension) {
         'json' => json_decode($content, true),
-        'yaml' => Yaml::parse($content)
+        'yaml' => Yaml::parse($content),
+        default => throw new \Exception("There is no such extension: {$extension}")
     };
 }
 
