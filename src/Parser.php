@@ -14,12 +14,12 @@ function parse(array $resultDiff, string $format): string
 function parseToJson(string $path): array
 {
     $content = getFileContent($path);
+    $extension = substr($path, strpos($path, '.') + 1);
 
-    if (str_ends_with($path, '.yaml') || str_ends_with($path, '.yml')) {
-        return Yaml::parse($content);
-    }
-
-    return json_decode($content, true);
+    return match ($extension) {
+        'json' => json_decode($content, true),
+        'yaml' => Yaml::parse($content)
+    };
 }
 
 function getFileContent(string $path): string
