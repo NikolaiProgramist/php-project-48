@@ -14,13 +14,13 @@ function parse(array $resultDiff, string $format): string
 function parseToJson(string $path): array
 {
     $content = getFileContent($path);
-    $offset = strpos($path, '.') + 1;
+    $offset = strpos($path, '.');
 
     if ($offset === false) {
         throw new \Exception("Incorrect path");
     }
 
-    $extension = substr($path, $offset);
+    $extension = substr($path, $offset + 1);
 
     return match ($extension) {
         'json' => json_decode($content, true),
