@@ -2,10 +2,14 @@
 
 namespace Differ\Differ;
 
+use Exception;
 use function Functional\sort;
 use function Differ\Parser\parse;
 use function Differ\Parser\parseToJson;
 
+/**
+ * @throws Exception
+ */
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = 'stylish'): string
 {
     $firstFile = parseToJson($pathToFile1);
