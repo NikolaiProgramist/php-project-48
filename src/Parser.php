@@ -39,17 +39,11 @@ function parseToJson(string $path): array
  */
 function getFileContent(string $path): string
 {
-    $dirPath = __DIR__;
+    $currentPath = realpath($path);
 
-    if (str_starts_with($path, '/')) {
-        $fullPath = $path;
-    } else {
-        $fullPath = "{$dirPath}/../../{$path}";
-    }
-
-    if (!file_exists($fullPath)) {
+    if ($currentPath === false) {
         throw new Exception("File does not exist: {$path}");
     }
 
-    return file_get_contents($fullPath);
+    return file_get_contents($currentPath);
 }
