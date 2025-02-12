@@ -13,9 +13,21 @@ if (file_exists($autoloadPathLocal)) {
 
 use function Differ\Differ\genDiff;
 
-$doc = <<<DOC
-Generate diff
+$about = <<<ABOUT
+ ____  _  __  __           
+|  _ \(_)/ _|/ _| ___ _ __ 
+| | | | | |_| |_ / _ \ '__|
+| |_| | |  _|  _|  __/ |   
+|____/|_|_| |_|  \___|_|   
 
+Version: 1.0
+
+Util for search different between data structure.
+With different formats of files.
+ABOUT;
+
+
+$doc = <<<DOC
 Usage:
   gendiff (-h|--help)
   gendiff (-v|--version)
@@ -27,6 +39,6 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-$args = Docopt::handle($doc, array('version' => 'Gendiff 1.0'));
+$args = Docopt::handle($doc, array('version' => $about));
 
 echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
