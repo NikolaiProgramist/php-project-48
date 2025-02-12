@@ -18,13 +18,7 @@ function parse(array $resultDiff, string $format): string
 function parseToJson(string $path): array
 {
     $content = getFileContent($path);
-    $offset = strpos($path, '.');
-
-    if ($offset === false) {
-        throw new Exception("Incorrect path: {$path}");
-    }
-
-    $extension = substr($path, $offset + 1);
+    $extension = pathinfo($path, PATHINFO_EXTENSION);
     $message = "The file format is not supported by the current version of the program: {$extension}";
 
     return match ($extension) {
