@@ -34,22 +34,4 @@ php bin/gendiff --format=stylish file1.json file2.json
 
 ## Examples in asciinema:
 
-#### JSON
-
-[![asciicast](https://asciinema.org/a/681719.svg)](https://asciinema.org/a/681719)
-
-#### YAML
-
-[![asciicast](https://asciinema.org/a/682331.svg)](https://asciinema.org/a/682331)
-
-#### Nested YAML (stylish format)
-
-[![asciicast](https://asciinema.org/a/684444.svg)](https://asciinema.org/a/684444)
-
-#### Nested YAML (plain format)
-
-[![asciicast](https://asciinema.org/a/haPb0VNshyI0vluxmI3e4ScgQ.svg)](https://asciinema.org/a/haPb0VNshyI0vluxmI3e4ScgQ)
-
-#### JSON of Differ (json format)
-
-[![asciicast](https://asciinema.org/a/FHSVCs1esQv4I5wXrA8Zo5X5r.svg)](https://asciinema.org/a/FHSVCs1esQv4I5wXrA8Zo5X5r)
+[![asciicast](https://asciinema.org/a/703225.svg)](https://asciinema.org/a/703225)
