@@ -3,6 +3,7 @@
 namespace Differ\Differ;
 
 use Exception;
+
 use function Functional\sort;
 use function Differ\Parser\parse;
 use function Differ\Parser\parseToJson;
