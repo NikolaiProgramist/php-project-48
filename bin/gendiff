@@ -22,8 +22,8 @@ $about = <<<ABOUT
 
 Version: 1.0
 
-Util for search different between data structure.
-With different formats of files.
+Utility/Library for finding differences between data structures.
+With different output formats (stylish, plain, json).
 ABOUT;
 
 
