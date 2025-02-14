@@ -35,3 +35,7 @@ php bin/gendiff --format=stylish file1.json file2.json
 ## Examples in asciinema:
 
 [![asciicast](https://asciinema.org/a/703225.svg)](https://asciinema.org/a/703225)
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/NikolaiProgramist/php-project-48.svg?variant=adaptive)](https://starchart.cc/NikolaiProgramist/php-project-48)
