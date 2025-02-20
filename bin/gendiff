@@ -28,7 +28,7 @@ ABOUT;
 
 
 $doc = <<<DOC
-Usage:
+Usage: differ v1.0
   gendiff (-h|--help)
   gendiff (-v|--version)
   gendiff [--format <fmt>] <firstFile> <secondFile>
