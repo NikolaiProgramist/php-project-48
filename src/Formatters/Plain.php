@@ -2,9 +2,12 @@
 
 namespace Differ\Formatters\Plain;
 
-const ADD_MARKER = 'added';
-const REMOVE_MARKER = 'removed';
-const UPDATED_MARKER = 'updated';
+enum Marker: string
+{
+    case ADD = 'added';
+    case REMOVE = 'removed';
+    case UPDATE = 'updated';
+}
 
 function plain(array $tree, string $path = '', int $depth = 1): string
 {
@@ -16,9 +19,9 @@ function plain(array $tree, string $path = '', int $depth = 1): string
             $newPath = $depth === 1 ? $key : "{$path}.{$key}";
             $resultString = $acc;
 
-            $addMarker = ADD_MARKER;
-            $removeMarker = REMOVE_MARKER;
-            $updatedMarker = UPDATED_MARKER;
+            $addMarker = Marker::ADD->value;
+            $removeMarker = Marker::REMOVE->value;
+            $updatedMarker = Marker::UPDATE->value;
 
             if ($status === 'unchanged') {
                 return $resultString;

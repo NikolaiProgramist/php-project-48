@@ -2,9 +2,12 @@
 
 namespace Differ\Formatters\Stylish;
 
-const ADD_MARKER = '+';
-const REMOVE_MARKER = '-';
-const UNCHANGED_MARKER = ' ';
+enum Marker: string
+{
+    case ADD = '+';
+    case REMOVE = '-';
+    case UNCHANGED = ' ';
+}
 
 function stylish(array $tree, string $replacer = ' ', int $spacesCount = 4): string
 {
@@ -22,9 +25,9 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
             $resultString = $acc;
 
             $status = match ($statusName) {
-                'add' => ADD_MARKER,
-                'remove' => REMOVE_MARKER,
-                default => UNCHANGED_MARKER
+                'add' => Marker::ADD->value,
+                'remove' => Marker::REMOVE->value,
+                default => Marker::UNCHANGED->value
             };
 
             $indentationCount = $spacesCount * $depth - 2;
@@ -33,7 +36,7 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
             if (array_key_exists('children', $keyData)) {
                 $value = $keyData['children'];
 
-                if ($status === ADD_MARKER) {
+                if ($status === Marker::ADD->value) {
                     $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
                     $string = getStylishInnerContent($status, $key, $innerContent, $indentation);
                     return "{$resultString}{$string}";
@@ -58,14 +61,14 @@ function getStylish(array $tree, string $replacer, int $spacesCount, int $depth 
             ];
 
             $stringBefore = getChangedString(
-                REMOVE_MARKER,
+                Marker::REMOVE->value,
                 $keyData['beforeValue'],
                 $key,
                 $data
             );
 
             $stringAfter = getChangedString(
-                ADD_MARKER,
+                Marker::ADD->value,
                 $keyData['afterValue'],
                 $key,
                 $data
@@ -86,13 +89,13 @@ function getArrayContent(array $tree, string $replacer, int $spacesCount, int $d
 
         if (array_key_exists('value', $tree[$key])) {
             $value = $tree[$key]['value'];
-            $string = getStylishString(UNCHANGED_MARKER, $key, $value, $indentation);
+            $string = getStylishString(Marker::UNCHANGED->value, $key, $value, $indentation);
             return "{$resultString}{$string}";
         }
 
         $value = $tree[$key]['children'];
         $innerContent = getArrayContent($value, $replacer, $spacesCount, $depth + 1);
-        return getStylishInnerContent(UNCHANGED_MARKER, $key, $innerContent, $indentation);
+        return getStylishInnerContent(Marker::UNCHANGED->value, $key, $innerContent, $indentation);
     }, '');
 }
 
