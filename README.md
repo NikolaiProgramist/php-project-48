@@ -27,7 +27,7 @@ If the files do not exist, the utility will notify you about it.
 
 ## Install project
 
-Downloading the utility and installing dependencies
+Downloading the utility and installing dependencies:
 
 ```bash
 git clone https://github.com/NikolaiProgramist/php-project-48.git
@@ -35,7 +35,7 @@ cd php-project-48
 make install
 ```
 
-Give the binary file execution rights
+Give the binary file execution rights:
 
 ```bash
 sudo chmod +x bin/gendiff
@@ -44,19 +44,19 @@ sudo chmod +x bin/gendiff
 ## Run
 
 To use the utility, run the binary file and specify the output format (`stylish` by default).
-Also pass the paths to the two files you need.
+Also pass the paths to the two files you need:
 
 ```bash
 bin/gendiff --format=stylish file1.json file2.json
 ```
 
-You can also choose the second output format `plain`
+You can also choose the second output format `plain`:
 
 ```bash
 bin/gendiff --format=plain file1.json file2.json
 ```
 
-Instead of the flag `--format`, you can use the short version `-f`
+Instead of the flag `--format`, you can use the short version `-f`.
 
 ## Examples:
 
