@@ -51,21 +51,21 @@ function sortingFirstFile(mixed $tree1, mixed $tree2): mixed
             if (is_array($tree1[$key]) && is_array($tree2[$key])) {
                 $innerContent = sortingFirstFile($tree1[$key], $tree2[$key]);
                 return array_merge($acc, [$key => ['status' => 'changed', 'children' => $innerContent]]);
-            } else {
-                $beforeValue = sortingFirstFile($tree1[$key], $tree1[$key]);
-                $afterValue = sortingFirstFile($tree2[$key], $tree2[$key]);
-
-                return array_merge(
-                    $acc,
-                    [
-                        $key => [
-                            'status' => 'remove',
-                            'beforeValue' => $beforeValue,
-                            'afterValue' => $afterValue
-                        ]
-                    ]
-                );
             }
+
+            $beforeValue = sortingFirstFile($tree1[$key], $tree1[$key]);
+            $afterValue = sortingFirstFile($tree2[$key], $tree2[$key]);
+
+            return array_merge(
+                $acc,
+                [
+                    $key => [
+                        'status' => 'remove',
+                        'beforeValue' => $beforeValue,
+                        'afterValue' => $afterValue
+                    ]
+                ]
+            );
         },
         []
     );
