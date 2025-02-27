@@ -1,10 +1,19 @@
 {
-    "name": "hexlet/code",
-    "description": "Util for search different between data structure. With different formats of files.",
-    "type": "project",
-    "version": "1.0.0",
-    "minimum-stability": "stable",
+    "name": "lucky/differ",
+    "type": "library",
+    "description": "Util for search different between data structure. With different formats of files",
+    "keywords": ["utility", "parser", "json", "yaml"],
+    "homepage": "https://github.com/NikolaiProgramist/Differ",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "NikolaiProgramist",
+            "email": "nikluk2005@mail.ru",
+            "role": "Developer"
+        }
+    ],
     "require": {
+        "php": ">=8.3",
         "wp-cli/php-cli-tools": "^0.12.0",
         "docopt/docopt": "^1.0",
         "lstrojny/functional-php": "^1.17",
@@ -14,13 +23,6 @@
         "squizlabs/php_codesniffer": "^3.10",
         "phpunit/phpunit": "^11.4"
     },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "NikolaiProgramist",
-            "email": "nikluk2005@mail.ru"
-        }
-    ],
     "bin": [
       "bin/gendiff"
     ],
