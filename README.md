@@ -30,7 +30,7 @@ If the files do not exist, the utility will notify you about it.
 Downloading the utility and installing dependencies:
 
 ```bash
-git clone https://github.com/NikolaiProgramist/php-project-48.git
+git clone https://github.com/NikolaiProgramist/Differ.git
 cd php-project-48
 make install
 ```
