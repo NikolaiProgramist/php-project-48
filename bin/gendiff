@@ -41,4 +41,8 @@ DOC;
 
 $args = Docopt::handle($doc, array('version' => $about));
 
-echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
+try {
+    echo genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
+} catch (Exception $e) {
+    echo "Error: {$e->getMessage()}";
+}
